@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseCsv, isValidEmail } from './csvParser'
+import { parseCsv, isValidCountryCode, isValidEmail } from './csvParser'
 
 describe('isValidEmail', () => {
   it('should return true for valid email addresses', () => {
@@ -17,6 +17,20 @@ describe('isValidEmail', () => {
     expect(isValidEmail('test.example.com')).toBe(false)
     expect(isValidEmail('test@.com')).toBe(false)
     expect(isValidEmail('test@example')).toBe(false)
+  })
+})
+
+describe('isValidCountryCode', () => {
+  it('accepts valid ISO 3166-1 alpha-2 codes case-insensitively', () => {
+    expect(isValidCountryCode('US')).toBe(true)
+    expect(isValidCountryCode('gb')).toBe(true)
+    expect(isValidCountryCode('TV')).toBe(true)
+  })
+
+  it('rejects invalid country codes', () => {
+    expect(isValidCountryCode('XX')).toBe(false)
+    expect(isValidCountryCode('USA')).toBe(false)
+    expect(isValidCountryCode('1A')).toBe(false)
   })
 })
 
@@ -152,6 +166,20 @@ John,Doe,john@example.com,,`
     expect(result[0].jobTitle).toBeUndefined()
     expect(result[0].countryCode).toBeUndefined()
     expect(result[0].isValid).toBe(true)
+  })
+
+  it('should reject invalid country codes and normalize valid codes', () => {
+    const csv = `firstName,lastName,email,countryCode
+John,Doe,john@example.com,us
+Jane,Smith,jane@example.com,XX`
+
+    const result = parseCsv(csv)
+
+    expect(result[0].countryCode).toBe('US')
+    expect(result[0].isValid).toBe(true)
+    expect(result[1].countryCode).toBe('XX')
+    expect(result[1].isValid).toBe(false)
+    expect(result[1].errors).toContain('Invalid country code (use an ISO 3166-1 alpha-2 code)')
   })
 
   it('should preserve row index correctly', () => {
