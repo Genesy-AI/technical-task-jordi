@@ -186,3 +186,6 @@ Create an `IMPROVEMENTS.md` file as if it were a document in our project managem
 ## Evaluation
 
 You won’t be evaluated on producing a single predefined _correct solution_, but rather on your problem-solving skills, the product mindset you showcase, your ability to reason and explain your thought process, the trade-offs behind your decisions, and how you managed to use AI tools.
+
+## Recording
+You can find the recording here: https://drive.google.com/drive/folders/1M1Ea_UpoiVe8E1V1qxGDU50tq5ryHSsS?usp=sharing
